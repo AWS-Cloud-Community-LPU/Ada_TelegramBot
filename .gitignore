@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+#API Key File
+api_key.py
+
 # Distribution / packaging
 .Python
 build/
@@ -14,6 +17,7 @@ dist/
 downloads/
 eggs/
 .eggs/
+*.vscode
 lib/
 lib64/
 parts/
@@ -109,6 +113,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+bot-env
 
 # Spyder project settings
 .spyderproject
