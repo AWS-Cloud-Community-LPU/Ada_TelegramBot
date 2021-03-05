@@ -18,7 +18,7 @@ This will install all the project dependencies.
 
 **3. Configure Missing File:**
 ```bash
-touch api_key.py
+echo "API_KEY = 'YOUR_BOT_API_KEY'" > api_key.py
 ```
 A file ```api_key.py``` is missing as it contains a token to access the HTTP API of [Ada](t.me/AdaLovelance_bot). The file is structured in this way: 
 ```python
