@@ -21,7 +21,7 @@ This will install all the project dependencies.
 **File: api_key.py**
 ```bash
 echo "API_KEY = 'YOUR_BOT_API_KEY'
-      CHANNEL_ID = 'CHAT_ID_OF_GROUP'" > secrets.py
+CHANNEL_ID = 'CHAT_ID_OF_GROUP'" > secrets.py
 ```
 A file ```secrets.py``` is missing as it contains a token to access the HTTP API of [Ada](t.me/AdaLovelance_bot) and Chat_id of [this](t.me/awscclpu) Group. The file is structured in this way: 
 ```python
