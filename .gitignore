@@ -7,7 +7,12 @@ __pycache__/
 *.so
 
 #API Key File
-api_key.py
+secrets.py
+published_log.txt
+
+#testing File and residual files
+test.py
+aws_entry.txt
 
 # Distribution / packaging
 .Python
