@@ -23,7 +23,7 @@ logging.basicConfig(
 def welcome_user(update: Update, context: CallbackContext) -> None:
     for new_user in update.message.new_chat_members:
         chat_id = update.message.chat_id
-        welcome_message = "Welcome @" + new_user.username
+        welcome_message = "Welcome " + new_user.first_name
         context.bot.send_message(chat_id, welcome_message)
 
 

@@ -26,7 +26,7 @@ def check_status(update, context) -> int:
     if user_status == "creator":
         print("Test Case #2: Success")
     else:
-        print("Test Case #1: FAILED")
+        print("Test Case #2: FAILED")
         print("User ID:", user_id)
         update.message.reply_text(C.ERROR_OWNER,
                                   parse_mode=ParseMode.MARKDOWN
