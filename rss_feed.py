@@ -20,7 +20,7 @@ def check_status(update: Update, context: CallbackContext) -> int:
     chat_id = update.message.chat_id  # Channel ID of the group
     user_id = update.message.from_user.id  # User ID of the group
     user_status = context.bot.getChatMember(chat_id, user_id).status
-    #user_status contains ("creator", "administrator" or "member")
+    # user_status contains ("creator", "administrator" or "member")
     if str(chat_id) == keys.CHANNEL_ID:
         print("Test Case #1: Success")
     else:
@@ -65,29 +65,26 @@ def brodcast_news(update: Update, context: CallbackContext):
         update : This object represents an incoming update.
         context : This is a context object error handler.
     """
-    brodcast_counter = 0
     if check_status(update, context) == -1:
         return -1
     news_feed = feedparser.parse(C.AWS_FEED_URL)
-    aws_file = "published_log.txt"
-    aws_r_file = open(aws_file, "r")
-    last_date = aws_r_file.readline()
-    aws_r_file.close()
-
-    for entry in reversed(news_feed.entries):
-        published = entry.published
-        date_time = datetime.strptime(published, '%a, %d %b %Y %H:%M:%S %z')
-        date_time = str(date_time.date()) + " " + str(date_time.time())
-
-        if date_time > last_date and brodcast_counter <= 4:
-            message = message_creator(entry)
-            context.bot.send_message(keys.CHANNEL_ID, message,
-                                     parse_mode=ParseMode.HTML
-                                     )
-            brodcast_counter = brodcast_counter + 1
-            print(date_time, file=open(aws_file, 'w'))
-            last_date = date_time
-            time.sleep(12 * 60 *60)  #12-Hours
+    for entry in news_feed.entries:
+        while True:
+            now = datetime.now()
+            current_time = now.strftime("%H:%M:%S")
+            time.sleep(1)
+            if str(current_time) in ("09:01:00", "09:01:01"):
+                message = message_creator(entry)
+                context.bot.send_message(keys.CHANNEL_ID, message,
+                                         parse_mode=ParseMode.HTML
+                                         )
+                time.sleep(1)
+            if str(current_time) in ("21:00:00", "21:00:01"):
+                message = message_creator(entry)
+                context.bot.send_message(keys.CHANNEL_ID, message,
+                                         parse_mode=ParseMode.HTML
+                                         )
+                time.sleep(1)
     return 0
 
 
@@ -101,5 +98,5 @@ def random_news(update: Update, context: CallbackContext) -> None:
     news_feed = feedparser.parse(C.AWS_FEED_URL)
     news_index = random.randint(0, len(news_feed.entries))
     entry = news_feed.entries[news_index]
-    message = message_creator( entry )
+    message = message_creator(entry)
     update.message.reply_text(message, parse_mode=ParseMode.HTML)
