@@ -44,7 +44,7 @@ def check_status(update: Update, context: CallbackContext) -> int:
     return 0
 
 
-def message_creator(entry) -> str:
+def message_creator(entry, greetings = "None") -> str:
     """Returns news in a proper format
 
     Keyword arguments:
@@ -57,6 +57,10 @@ def message_creator(entry) -> str:
     summary = "\n\n<b>Summary:</b> " + summary
     link = "\n\n<b>Link: </b>" + "<a href=\"" + entry.link + "\">Click here</a>"
     message = title + summary + link
+    if greetings == "morning":
+        message = "<b> Good Morning Everyone </b>\n\n" + message
+    elif greetings == "night":
+        message = message + "\n\n<b> Good Night Everyone </b>"
     return message
 
 
@@ -70,13 +74,16 @@ def brodcast_news(update: Update, context: CallbackContext):
     if check_status(update, context) == -1:
         return -1
     news_feed = feedparser.parse(C.AWS_FEED_URL)
+    update.message.reply_text("News will be periodically sent at 9:00am and 9:00pm",
+                              parse_mode=ParseMode.MARKDOWN
+                              )
     for entry in news_feed.entries:
         while True:
             now = datetime.now()
             current_time = now.strftime("%H:%M:%S")
             time.sleep(1)
-            if str(current_time) in ("09:01:00", "09:00:01"):
-                message = message_creator(entry)
+            if str(current_time) in ("09:00:00", "09:00:01"):
+                message = message_creator(entry, "morning")
                 context.bot.send_message(keys.CHANNEL_ID, message,
                                          parse_mode=ParseMode.HTML
                                          )
@@ -84,7 +91,7 @@ def brodcast_news(update: Update, context: CallbackContext):
                       file=open(C.LOG_FILE, 'a+'))
                 time.sleep(1)
             if str(current_time) in ("21:00:00", "21:00:01"):
-                message = message_creator(entry)
+                message = message_creator(entry, "night")
                 context.bot.send_message(keys.CHANNEL_ID, message,
                                          parse_mode=ParseMode.HTML
                                          )

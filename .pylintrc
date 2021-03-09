@@ -1,3 +1,4 @@
 [MASTER]
 disable=
     C0114, # missing-module-docstring
+    W0613, #Unused argument 'context'
