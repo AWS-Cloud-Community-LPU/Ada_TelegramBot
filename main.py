@@ -21,6 +21,12 @@ logging.basicConfig(
 
 
 def welcome_user(update: Update, context: CallbackContext) -> None:
+    """Welcome Command for New User
+
+    Keyword arguments:
+        update : This object represents an incoming update.
+        context : This is a context object error handler.
+    """
     for new_user in update.message.new_chat_members:
         chat_id = update.message.chat_id
         welcome_message = "Welcome " + new_user.first_name
@@ -28,25 +34,51 @@ def welcome_user(update: Update, context: CallbackContext) -> None:
 
 
 def start_command(update: Update, context: CallbackContext) -> None:
+    """Start Command for Ada
+
+    Keyword arguments:
+        update : This object represents an incoming update.
+        context : This is a context object error handler.
+    """
     user = update.message.from_user
     update.message.reply_text(f'Hy there !! {user.first_name}')
 
 
 def help_command(update: Update, context: CallbackContext) -> None:
+    """Help Command for User
+
+    Keyword arguments:
+        update : This object represents an incoming update.
+        context : This is a context object error handler.
+    """
     update.message.reply_text(C.HELP_TEXT)
 
 
 def source_command(update: Update, context: CallbackContext) -> None:
+    """Prints GitHub Source Code
+
+    Keyword arguments:
+        update : This object represents an incoming update.
+        context : This is a context object error handler.
+    """
     username = update.message.from_user.first_name
     message = Template(C.SOURCE).substitute(name=username)
     update.message.reply_text(message)
 
 
 def events_command(update: Update, context: CallbackContext) -> None:
+    """Shows Upcoming events
+
+    Keyword arguments:
+        update : This object represents an incoming update.
+        context : This is a context object error handler.
+    """
     update.message.reply_text(C.EVENTS)
 
 
 def main():
+    """Main function responsible for starting the bot and listening to commands.
+    """
     # Create the Updater and pass it our bot's token.
     updater = Updater(keys.API_KEY, use_context=True)
 

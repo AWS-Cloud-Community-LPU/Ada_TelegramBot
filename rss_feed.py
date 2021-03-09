@@ -9,11 +9,18 @@ from telegram import ParseMode, Update
 import constants as C
 
 
-def check_status(update, context) -> int:
+def check_status(update: Update, context: CallbackContext) -> int:
+    """Checks status if brodcast news was sent from owner of group and from
+    a perticular group.
+
+    Keyword arguments:
+        update : This object represents an incoming update.
+        context : This is a context object error handler.
+    """
     chat_id = update.message.chat_id  # Channel ID of the group
     user_id = update.message.from_user.id  # User ID of the group
     user_status = context.bot.getChatMember(chat_id, user_id).status
-    #user_status = contains ("creator", "administrator" or "member")
+    #user_status contains ("creator", "administrator" or "member")
     if str(chat_id) == keys.CHANNEL_ID:
         print("Test Case #1: Success")
     else:
@@ -36,6 +43,11 @@ def check_status(update, context) -> int:
 
 
 def message_creator(entry) -> str:
+    """Returns news in a proper format
+
+    Keyword arguments:
+        entry : a perticular entry of rss feed used for extracting data.
+    """
     title = "<b>Title: " + entry.title + "</b>"
     cleanr = re.compile(
         '<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
@@ -47,6 +59,12 @@ def message_creator(entry) -> str:
 
 
 def brodcast_news(update: Update, context: CallbackContext):
+    """Brodcasts news after every certain time interval
+
+    Keyword arguments:
+        update : This object represents an incoming update.
+        context : This is a context object error handler.
+    """
     brodcast_counter = 0
     if check_status(update, context) == -1:
         return -1
@@ -74,6 +92,12 @@ def brodcast_news(update: Update, context: CallbackContext):
 
 
 def random_news(update: Update, context: CallbackContext) -> None:
+    """Sends a random AWS news to user.
+
+    Keyword arguments:
+        update : This object represents an incoming update.
+        context : This is a context object error handler.
+    """
     news_feed = feedparser.parse(C.AWS_FEED_URL)
     news_index = random.randint(0, len(news_feed.entries))
     entry = news_feed.entries[news_index]
