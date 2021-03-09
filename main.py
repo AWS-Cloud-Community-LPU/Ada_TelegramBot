@@ -1,6 +1,7 @@
 from string import Template
 import secrets as keys
 import logging
+from datetime import datetime
 from telegram.ext import (
     Updater,
     CommandHandler,
@@ -12,8 +13,8 @@ from telegram import Update
 import constants as C
 import rss_feed as R
 
-
 print("Bot Started...")
+print("\n\n\nBot Started at", datetime.now(), file=open(C.LOG_FILE, 'a+'))
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -29,8 +30,11 @@ def welcome_user(update: Update, context: CallbackContext) -> None:
     """
     for new_user in update.message.new_chat_members:
         chat_id = update.message.chat_id
-        welcome_message = "Welcome " + new_user.first_name
+        new_user = new_user.first_name
+        welcome_message = "Welcome " + new_user
         context.bot.send_message(chat_id, welcome_message)
+        print(f"Welcome user at {datetime.now()} User: {new_user}", file=open(
+            C.LOG_FILE, 'a+'))
 
 
 def start_command(update: Update, context: CallbackContext) -> None:

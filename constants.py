@@ -1,3 +1,5 @@
+LOG_FILE = "log.txt"
+
 AWS_FEED_URL = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 
 HELP_TEXT = """
