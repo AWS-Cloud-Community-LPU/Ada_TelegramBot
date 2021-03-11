@@ -44,11 +44,12 @@ def check_status(update: Update, context: CallbackContext) -> int:
     return 0
 
 
-def message_creator(entry, greetings = "None") -> str:
+def message_creator(entry, greetings="None") -> str:
     """Returns news in a proper format
 
     Keyword arguments:
         entry : a perticular entry of rss feed used for extracting data.
+        greetings : "None" in case of random news and function defined
     """
     title = "<b>Title: " + entry.title + "</b>"
     cleanr = re.compile(
@@ -64,6 +65,42 @@ def message_creator(entry, greetings = "None") -> str:
     return message
 
 
+def check_time() -> str:
+    """
+    Checks time
+
+    Return:
+        "morning" : if time is 9AM.
+        "night" " if time is 9PM.
+    """
+    while True:
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        time.sleep(1)
+        if str(current_time) in ("09:00:00", "09:00:01", "09:00:02"):
+            time.sleep(1)
+            return "morning"
+        if str(current_time) in ("21:00:00", "21:00:01", "21:00:02"):
+            time.sleep(1)
+            return "night"
+
+
+def feed_parser():
+    """Parses feed of AWS What's new and gives non duplicate news.
+    """
+    news_feed = feedparser.parse(C.AWS_FEED_URL)
+    with open(C.TITLE_STORE, "r") as title_file:
+        line_titles = title_file.readlines()
+        for entry in news_feed.entries:
+            flag = 0
+            for line_title in line_titles:
+                if str(entry.title)+"\n" == line_title:
+                    flag = 1
+            if flag == 0:
+                return entry
+    return news_feed.entries[0]
+
+
 def brodcast_news(update: Update, context: CallbackContext):
     """Brodcasts news at 9:00am and 9:00pm everyday.
 
@@ -73,31 +110,30 @@ def brodcast_news(update: Update, context: CallbackContext):
     """
     if check_status(update, context) == -1:
         return -1
-    news_feed = feedparser.parse(C.AWS_FEED_URL)
     update.message.reply_text("News will be periodically sent at 9:00am and 9:00pm",
                               parse_mode=ParseMode.MARKDOWN
                               )
-    for entry in news_feed.entries:
-        while True:
-            now = datetime.now()
-            current_time = now.strftime("%H:%M:%S")
+    while True:
+        entry = feed_parser()
+        time_status = check_time()
+        if time_status == "morning":
+            print(entry.title, file=open(C.TITLE_STORE, 'a+'))
+            message = message_creator(entry, "morning")
+            context.bot.send_message(keys.CHANNEL_ID, message,
+                                     parse_mode=ParseMode.HTML
+                                     )
+            print("Brodcasted News send at: ", datetime.now(),
+                  file=open(C.LOG_FILE, 'a+'))
             time.sleep(1)
-            if str(current_time) in ("09:00:00", "09:00:01"):
-                message = message_creator(entry, "morning")
-                context.bot.send_message(keys.CHANNEL_ID, message,
-                                         parse_mode=ParseMode.HTML
-                                         )
-                print("News Message send at: ", now,
-                      file=open(C.LOG_FILE, 'a+'))
-                time.sleep(1)
-            if str(current_time) in ("21:00:00", "21:00:01"):
-                message = message_creator(entry, "night")
-                context.bot.send_message(keys.CHANNEL_ID, message,
-                                         parse_mode=ParseMode.HTML
-                                         )
-                print("News Message send at: ", now,
-                      file=open(C.LOG_FILE, 'a+'))
-                time.sleep(1)
+        if time_status == "night":
+            print(entry.title, file=open(C.TITLE_STORE, 'a+'))
+            message = message_creator(entry, "night")
+            context.bot.send_message(keys.CHANNEL_ID, message,
+                                     parse_mode=ParseMode.HTML
+                                     )
+            print("Brodcasted News send at: ", datetime.now(),
+                  file=open(C.LOG_FILE, 'a+'))
+            time.sleep(1)
     return 0
 
 

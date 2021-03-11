@@ -8,11 +8,12 @@ __pycache__/
 
 #API Key File
 secrets.py
-published_log.txt
 
 #testing File and residual files
 test.py
 aws_entry.txt
+published_log.txt
+titles.txt
 
 # Distribution / packaging
 .Python
