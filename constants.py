@@ -34,7 +34,3 @@ Currently no events are scheduled.
 ERROR_OWNER = """
 Sorry, The command can only be executed by owners.
 """
-
-ERROR_CHAT_ID = """
-Sorry, The command can only be executed in [this](t.me/awscclpu) Group.
-"""

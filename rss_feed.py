@@ -10,8 +10,7 @@ import constants as C
 
 
 def check_status(update: Update, context: CallbackContext) -> int:
-    """Checks status if brodcast news was sent from owner of group and from
-    a perticular group.
+    """Checks status if brodcast news was sent from a specific username.
 
     Keyword arguments:
         update : This object represents an incoming update.
@@ -20,23 +19,13 @@ def check_status(update: Update, context: CallbackContext) -> int:
     print(f"Brodcast News at: {datetime.now()}", file=open(
         C.LOG_FILE, 'a+'))
     chat_id = update.message.chat_id  # Channel ID of the group
-    user_id = update.message.from_user.id  # User ID of the group
-    user_status = context.bot.getChatMember(chat_id, user_id).status
-    # user_status contains ("creator", "administrator" or "member")
-    if str(chat_id) == keys.CHANNEL_ID:
+    user_id = update.message.from_user.id  # User ID of the person
+    username = context.bot.getChatMember(chat_id, user_id).user.username
+    if username == "garvit_joshi9":  # Sent from Developer
         print("Test Case #1: Success", file=open(C.LOG_FILE, 'a+'))
     else:
-        print("Test Case #1: FAILED\nChat ID:",
-              chat_id, file=open(C.LOG_FILE, 'a+'))
-        update.message.reply_text(C.ERROR_CHAT_ID,
-                                  parse_mode=ParseMode.MARKDOWN
-                                  )
-        return -1
-    if user_status == "creator":
-        print("Test Case #2: Success", file=open(C.LOG_FILE, 'a+'))
-    else:
-        print("Test Case #2: FAILED\nUser ID:",
-              user_id, file=open(C.LOG_FILE, 'a+'))
+        print("Test Case #1: FAILED\nUserName:",
+              username, file=open(C.LOG_FILE, 'a+'))
         update.message.reply_text(C.ERROR_OWNER,
                                   parse_mode=ParseMode.MARKDOWN
                                   )
@@ -134,7 +123,6 @@ def brodcast_news(update: Update, context: CallbackContext):
             print("Brodcasted News send at: ", datetime.now(),
                   file=open(C.LOG_FILE, 'a+'))
             time.sleep(1)
-    return 0
 
 
 def random_news(update: Update, context: CallbackContext) -> None:
