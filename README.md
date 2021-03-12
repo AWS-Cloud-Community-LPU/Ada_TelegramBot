@@ -29,11 +29,11 @@ API_KEY = 'YOUR_BOT_API_KEY'
 CHANNEL_ID = 'CHAT_ID_OF_GROUP'
 ```
 
-**File: published_log.txt**
+**File: titles.txt**
 ```bash
-echo "2021-03-05 00:00:00" > published_log.txt
+touch titles.txt
 ```
-A file ```published_log.txt``` contains that how much has bot surfed the rss_feed by storing the latest published date of that News.
+A file ```titles.txt``` contains all titles of brodcasted news so that duplicate news cannot be sended.
 
 **4. :tada: Run the bot:**
 ```bash
