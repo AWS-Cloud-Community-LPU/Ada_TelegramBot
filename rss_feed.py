@@ -3,6 +3,7 @@ from datetime import datetime
 import time
 import secrets as keys
 import random
+from os import path
 import feedparser
 from telegram.ext import CallbackContext
 from telegram import ParseMode, Update
@@ -77,6 +78,8 @@ def check_time() -> str:
 def feed_parser():
     """Parses feed of AWS What's new and gives non duplicate news.
     """
+    if not path.exists(C.TITLE_STORE):
+        open(C.TITLE_STORE, 'a').close()
     news_feed = feedparser.parse(C.AWS_FEED_URL)
     with open(C.TITLE_STORE, "r") as title_file:
         line_titles = title_file.readlines()
