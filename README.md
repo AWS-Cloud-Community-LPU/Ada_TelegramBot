@@ -35,6 +35,12 @@ touch titles.txt
 ```
 A file ```titles.txt``` contains all titles of brodcasted news so that duplicate news cannot be sended.
 
+**File: events.txt**
+```bash
+touch events.txt
+```
+A file ```events.txt``` contains all the Upcoming Events in a group of 3 Lines.
+
 **4. :tada: Run the bot:**
 ```bash
 python3 main.py

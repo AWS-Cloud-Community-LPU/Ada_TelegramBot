@@ -9,7 +9,7 @@ from telegram.ext import (
     MessageHandler,
     Filters
 )
-from telegram import Update
+from telegram import Update, ParseMode
 import constants as C
 import rss_feed as R
 
@@ -70,14 +70,27 @@ def source_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(message)
 
 
-def events_command(update: Update, context: CallbackContext) -> None:
+def events_command(update: Update, context: CallbackContext) -> int:
     """Shows Upcoming events
 
     Keyword arguments:
         update : This object represents an incoming update.
         context : This is a context object error handler.
     """
-    update.message.reply_text(C.EVENTS)
+    try:
+        with open(C.EVENT_STORE, "r") as event_file:
+            line_events = event_file.readlines()
+            line_length = len(line_events)
+            if line_length == 0:
+                update.message.reply_text(C.NO_EVENTS, parse_mode=ParseMode.MARKDOWN)
+                return -1
+            for i in range(0,line_length,3):
+                line_event = line_events[i] + line_events [i+1] + line_events[i+2]
+                update.message.reply_text(line_event, parse_mode=ParseMode.HTML)
+            return 0
+    except FileNotFoundError:
+        update.message.reply_text(C.NO_EVENTS, parse_mode=ParseMode.MARKDOWN)
+        return -2
 
 
 def main():

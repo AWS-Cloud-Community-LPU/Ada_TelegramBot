@@ -2,6 +2,8 @@ LOG_FILE = "log.txt"   #logs message and important data
 
 TITLE_STORE = "titles.txt"  #logs titles of news that are already sent
 
+EVENT_STORE = "events.txt"  #Store upcoming events
+
 AWS_FEED_URL = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 
 HELP_TEXT = """
@@ -27,8 +29,8 @@ In case of bottlenecks please feel free to message @garvit_joshi9.
 Happy Coding !! \U0001F60E
 """
 
-EVENTS = """
-Currently no events are scheduled.
+NO_EVENTS = """
+Currently, No events are scheduled.
 """
 
 ERROR_OWNER = """
