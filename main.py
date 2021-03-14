@@ -82,11 +82,13 @@ def events_command(update: Update, context: CallbackContext) -> int:
             line_events = event_file.readlines()
             line_length = len(line_events)
             if line_length == 0:
-                update.message.reply_text(C.NO_EVENTS, parse_mode=ParseMode.MARKDOWN)
+                update.message.reply_text(
+                    C.NO_EVENTS, parse_mode=ParseMode.MARKDOWN)
                 return -1
-            for i in range(0,line_length,3):
-                line_event = line_events[i] + line_events [i+1] + line_events[i+2]
-                update.message.reply_text(line_event, parse_mode=ParseMode.HTML)
+            for i in range(0, line_length, 2):
+                line_event = line_events[i] + line_events[i+1]
+                update.message.reply_text(
+                    line_event, parse_mode=ParseMode.HTML)
             return 0
     except FileNotFoundError:
         update.message.reply_text(C.NO_EVENTS, parse_mode=ParseMode.MARKDOWN)
