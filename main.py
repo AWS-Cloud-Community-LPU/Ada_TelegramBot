@@ -14,7 +14,7 @@ import constants as C
 import rss_feed as R
 
 print("Bot Started...")
-print("\n\n\nBot Started at", datetime.now(), file=open(C.LOG_FILE, 'a+'))
+print(f"\n\nBot Started at {datetime.now()}\n", file=open(C.LOG_FILE, 'a+'))
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO

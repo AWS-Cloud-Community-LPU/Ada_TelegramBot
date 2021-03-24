@@ -18,7 +18,7 @@ def check_status(update: Update, context: CallbackContext) -> int:
         update : This object represents an incoming update.
         context : This is a context object error handler.
     """
-    print(f"Brodcast News at: {datetime.now()}", file=open(
+    print(f"BRODCAST NEWS invoked at: {datetime.now()}", file=open(
         C.LOG_FILE, 'a+'))
     chat_id = update.message.chat_id  # Channel ID of the group
     user_id = update.message.from_user.id  # User ID of the person
@@ -26,16 +26,16 @@ def check_status(update: Update, context: CallbackContext) -> int:
     if username == "garvit_joshi9":  # Sent from Developer
         print("Test Case #1: SUCCESS", file=open(C.LOG_FILE, 'a+'))
     else:
-        print("Test Case #1: FAILED\nUserName:",
-              username, file=open(C.LOG_FILE, 'a+'))
+        print(f"Test Case #1: FAILED\nUserName: {username}\n", file=open(
+            C.LOG_FILE, 'a+'))
         update.message.reply_text(C.ERROR_OWNER,
                                   parse_mode=ParseMode.MARKDOWN
                                   )
         return -1
     if C.BRODCAST_NEWS_FLAG == 0:
-        print("Test Case #2: SUCCESS", file=open(C.LOG_FILE, 'a+'))
+        print("Test Case #2: SUCCESS\n", file=open(C.LOG_FILE, 'a+'))
     else:
-        print("Test Case #2: FAILED", file=open(C.LOG_FILE, 'a+'))
+        print("Test Case #2: FAILED\n", file=open(C.LOG_FILE, 'a+'))
         update.message.reply_text(C.ERROR_BRODCAST_AGAIN,
                                   parse_mode=ParseMode.MARKDOWN
                                   )
@@ -124,7 +124,7 @@ def brodcast_news(update: Update, context: CallbackContext):
             context.bot.send_message(keys.CHANNEL_ID, message,
                                      parse_mode=ParseMode.HTML
                                      )
-            print("Brodcasted News send at: ", datetime.now(),
+            print(f"Brodcasted News send at: {datetime.now()}\n",
                   file=open(C.LOG_FILE, 'a+'))
             time.sleep(1)
         if time_status == "night":
@@ -133,7 +133,7 @@ def brodcast_news(update: Update, context: CallbackContext):
             context.bot.send_message(keys.CHANNEL_ID, message,
                                      parse_mode=ParseMode.HTML
                                      )
-            print("Brodcasted News send at: ", datetime.now(),
+            print(f"Brodcasted News send at: {datetime.now()}\n",
                   file=open(C.LOG_FILE, 'a+'))
             time.sleep(1)
 
@@ -150,5 +150,5 @@ def random_news(update: Update, context: CallbackContext) -> None:
     entry = news_feed.entries[news_index]
     message = message_creator(entry)
     update.message.reply_text(message, parse_mode=ParseMode.HTML)
-    print("Random News Message send at: ",
-          datetime.now(), file=open(C.LOG_FILE, 'a+'))
+    print(f"Random News Message send at: {datetime.now()}\n", file=open(
+        C.LOG_FILE, 'a+'))
