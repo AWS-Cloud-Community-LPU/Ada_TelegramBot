@@ -11,7 +11,8 @@ import constants as C
 
 
 def check_status(update: Update, context: CallbackContext) -> int:
-    """Checks status if brodcast news was sent from a specific username.
+    """Checks status if brodcast news was sent from a specific username,
+    and it news command is only invoked once.
 
     Keyword arguments:
         update : This object represents an incoming update.
@@ -23,7 +24,7 @@ def check_status(update: Update, context: CallbackContext) -> int:
     user_id = update.message.from_user.id  # User ID of the person
     username = context.bot.getChatMember(chat_id, user_id).user.username
     if username == "garvit_joshi9":  # Sent from Developer
-        print("Test Case #1: Success", file=open(C.LOG_FILE, 'a+'))
+        print("Test Case #1: SUCCESS", file=open(C.LOG_FILE, 'a+'))
     else:
         print("Test Case #1: FAILED\nUserName:",
               username, file=open(C.LOG_FILE, 'a+'))
@@ -31,6 +32,15 @@ def check_status(update: Update, context: CallbackContext) -> int:
                                   parse_mode=ParseMode.MARKDOWN
                                   )
         return -1
+    if C.BRODCAST_NEWS_FLAG == 0:
+        print("Test Case #2: SUCCESS", file=open(C.LOG_FILE, 'a+'))
+    else:
+        print("Test Case #2: FAILED", file=open(C.LOG_FILE, 'a+'))
+        update.message.reply_text(C.ERROR_BRODCAST_AGAIN,
+                                  parse_mode=ParseMode.MARKDOWN
+                                  )
+        return -1
+    C.BRODCAST_NEWS_FLAG = 1
     return 0
 
 

@@ -4,6 +4,8 @@ TITLE_STORE = "titles.txt"  #logs titles of news that are already sent
 
 EVENT_STORE = "events.txt"  #Store upcoming events
 
+BRODCAST_NEWS_FLAG = 0
+
 AWS_FEED_URL = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 
 HELP_TEXT = """
@@ -35,4 +37,8 @@ Currently, No events are scheduled.
 
 ERROR_OWNER = """
 Sorry, The command can only be executed by owners.
+"""
+
+ERROR_BRODCAST_AGAIN = """
+News are already being sent.
 """
