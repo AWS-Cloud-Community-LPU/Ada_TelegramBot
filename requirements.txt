@@ -1,12 +1,12 @@
 APScheduler==3.6.3
 astroid==2.5.1
-autopep8==1.5.5
+autopep8==1.5.6
 certifi==2020.12.5
 feedparser==6.0.2
-isort==5.7.0
-lazy-object-proxy==1.5.2
+isort==5.8.0
+lazy-object-proxy==1.6.0
 mccabe==0.6.1
-pycodestyle==2.6.0
+pycodestyle==2.7.0
 pylint==2.7.2
 python-telegram-bot==13.4.1
 pytz==2021.1
