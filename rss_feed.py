@@ -12,7 +12,7 @@ import constants as C
 
 def check_status(update: Update, context: CallbackContext) -> int:
     """Checks status if brodcast news was sent from a specific username,
-    and it news command is only invoked once.
+    and if brod_news command is only invoked once.
 
     Keyword arguments:
         update : This object represents an incoming update.
@@ -58,10 +58,10 @@ def message_creator(entry, greetings="None") -> str:
     summary = "\n\n<b>Summary:</b> " + summary
     link = "\n\n<b>Link: </b>" + "<a href=\"" + entry.link + "\">Click here</a>"
     message = title + summary + link
-    if greetings == "morning":
-        message = "<b> Good Morning Everyone </b>\n\n" + message
-    elif greetings == "night":
-        message = message + "\n\n<b> Good Night Everyone </b>"
+    if greetings in ("Morning", "Afternoon"):
+        message = "<b> Good " + greetings + " Everyone </b>\n\n" + message
+    elif greetings == "Night":
+        message = message + "\n\n<b> Good " + greetings + " Everyone </b>"
     return message
 
 
@@ -70,19 +70,23 @@ def check_time() -> str:
     Checks time
 
     Return:
-        "morning" : if time is 9AM.
-        "night" " if time is 9PM.
+        "Morning" : if time is 9AM.
+        "Afternoon" : if time is 1PM.
+        "Night" : if time is 9PM.
     """
     while True:
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
         time.sleep(1)
         if str(current_time) in ("09:00:00", "09:00:01", "09:00:02"):
-            time.sleep(1)
-            return "morning"
-        if str(current_time) in ("21:00:00", "21:00:01", "21:00:02"):
-            time.sleep(1)
-            return "night"
+            time.sleep(3)
+            return "Morning"
+        elif str(current_time) in ("13:00:00", "13:00:01", "13:00:02"):
+            time.sleep(3)
+            return "Afternoon"
+        elif str(current_time) in ("21:00:00", "21:00:01", "21:00:02"):
+            time.sleep(3)
+            return "Night"
 
 
 def feed_parser():
@@ -104,7 +108,7 @@ def feed_parser():
 
 
 def brodcast_news(update: Update, context: CallbackContext):
-    """Brodcasts news at 9:00am and 9:00pm everyday.
+    """Brodcasts news at 9:00am, 1:00pm and 9:00pm everyday.
 
     Keyword arguments:
         update : This object represents an incoming update.
@@ -112,24 +116,24 @@ def brodcast_news(update: Update, context: CallbackContext):
     """
     if check_status(update, context) == -1:
         return -1
-    update.message.reply_text("News will be periodically sent at 9:00am and 9:00pm",
+    update.message.reply_text("News will be periodically sent at 9:00am, 1:00pm and 9:00pm",
                               parse_mode=ParseMode.MARKDOWN
                               )
     while True:
         entry = feed_parser()
         time_status = check_time()
-        if time_status == "morning":
+        if time_status in ("Morning", "Afternoon"):
             print(entry.title, file=open(C.TITLE_STORE, 'a+'))
-            message = message_creator(entry, "morning")
+            message = message_creator(entry, time_status)
             context.bot.send_message(keys.CHANNEL_ID, message,
                                      parse_mode=ParseMode.HTML
                                      )
             print(f"Brodcasted News send at: {datetime.now()}\n",
                   file=open(C.LOG_FILE, 'a+'))
             time.sleep(1)
-        if time_status == "night":
+        if time_status == "Night":
             print(entry.title, file=open(C.TITLE_STORE, 'a+'))
-            message = message_creator(entry, "night")
+            message = message_creator(entry, time_status)
             context.bot.send_message(keys.CHANNEL_ID, message,
                                      parse_mode=ParseMode.HTML
                                      )
