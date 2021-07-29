@@ -58,7 +58,7 @@ def message_creator(entry, greetings="None") -> str:
     summary = "\n\n<b>Summary:</b> " + summary
     link = "\n\n<b>Link: </b>" + "<a href=\"" + entry.link + "\">Click here</a>"
     message = title + summary + link
-    if greetings in ("Morning", "Afternoon"):
+    if greetings in ("Morning", "Afternoon", "Evening"):
         message = "<b> Good " + greetings + " Everyone </b>\n\n" + message
     elif greetings == "Night":
         message = message + "\n\n<b> Good " + greetings + " Everyone </b>"
@@ -72,6 +72,7 @@ def check_time() -> str:
     Return:
         "Morning" : if time is 9AM.
         "Afternoon" : if time is 1PM.
+        "Evening" : if time is 5:30PM.
         "Night" : if time is 9PM.
     """
     while True:
@@ -84,6 +85,9 @@ def check_time() -> str:
         elif str(current_time) in ("13:00:00", "13:00:01", "13:00:02"):
             time.sleep(3)
             return "Afternoon"
+        elif str(current_time) in ("17:30:00", "17:30:01", "17:30:02"):
+            time.sleep(3)
+            return "Evening"
         elif str(current_time) in ("21:00:00", "21:00:01", "21:00:02"):
             time.sleep(3)
             return "Night"
@@ -108,7 +112,7 @@ def feed_parser():
 
 
 def brodcast_news(update: Update, context: CallbackContext):
-    """Brodcasts news at 9:00am, 1:00pm and 9:00pm everyday.
+    """Brodcasts news at 9:00am, 1:00pm, 5:30pm and 9:00pm everyday.
 
     Keyword arguments:
         update : This object represents an incoming update.
@@ -116,13 +120,13 @@ def brodcast_news(update: Update, context: CallbackContext):
     """
     if check_status(update, context) == -1:
         return -1
-    update.message.reply_text("News will be periodically sent at 9:00am, 1:00pm and 9:00pm",
+    update.message.reply_text("News will be periodically sent at 9:00am, 1:00pm, 5:30pm and 9:00pm",
                               parse_mode=ParseMode.MARKDOWN
                               )
     while True:
         entry = feed_parser()
         time_status = check_time()
-        if time_status in ("Morning", "Afternoon"):
+        if time_status in ("Morning", "Afternoon", "Evening"):
             print(entry.title, file=open(C.TITLE_STORE, 'a+'))
             message = message_creator(entry, time_status)
             context.bot.send_message(keys.CHANNEL_ID, message,
