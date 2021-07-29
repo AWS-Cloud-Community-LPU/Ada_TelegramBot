@@ -126,24 +126,14 @@ def brodcast_news(update: Update, context: CallbackContext):
     while True:
         entry = feed_parser()
         time_status = check_time()
-        if time_status in ("Morning", "Afternoon", "Evening"):
-            print(entry.title, file=open(C.TITLE_STORE, 'a+'))
-            message = message_creator(entry, time_status)
-            context.bot.send_message(keys.CHANNEL_ID, message,
-                                     parse_mode=ParseMode.HTML
-                                     )
-            print(f"Brodcasted News send at: {datetime.now()}\n",
-                  file=open(C.LOG_FILE, 'a+'))
-            time.sleep(1)
-        if time_status == "Night":
-            print(entry.title, file=open(C.TITLE_STORE, 'a+'))
-            message = message_creator(entry, time_status)
-            context.bot.send_message(keys.CHANNEL_ID, message,
-                                     parse_mode=ParseMode.HTML
-                                     )
-            print(f"Brodcasted News send at: {datetime.now()}\n",
-                  file=open(C.LOG_FILE, 'a+'))
-            time.sleep(1)
+        print(entry.title, file=open(C.TITLE_STORE, 'a+'))
+        message = message_creator(entry, time_status)
+        context.bot.send_message(keys.CHANNEL_ID, message,
+                                 parse_mode=ParseMode.HTML
+                                 )
+        print(f"Brodcasted News send at: {datetime.now()}\n",
+              file=open(C.LOG_FILE, 'a+'))
+        time.sleep(1)
 
 
 def random_news(update: Update, context: CallbackContext) -> None:
