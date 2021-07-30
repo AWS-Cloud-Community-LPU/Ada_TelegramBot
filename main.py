@@ -21,6 +21,25 @@ logging.basicConfig(
 )
 
 
+def get_time():
+    """Gets Current Time
+    Returns:
+        HH:MM:SS AM/PM DD/MM/YYYY
+    """
+    return datetime.now().strftime('%I:%M:%S %p %d/%m/%Y')
+
+
+def get_username(update: Update, context: CallbackContext):
+    """Gets Username of a person
+    Returns:
+        username
+    """
+    chat_id = update.message.chat_id  # Channel ID of the group
+    user_id = update.message.from_user.id  # User ID of the person
+    username = context.bot.getChatMember(chat_id, user_id).user.username
+    return username
+
+
 def welcome_user(update: Update, context: CallbackContext) -> None:
     """Welcome Command for New User
 
@@ -95,6 +114,34 @@ def events_command(update: Update, context: CallbackContext) -> int:
         return -2
 
 
+def send_logs(update: Update, context: CallbackContext) -> None:
+    """Sends Logs
+    Keyword arguments:
+        update : This object represents an incoming update.
+        context : This is a context object error handler.
+    """
+    chat_id = update.message.chat_id
+    username = get_username(update, context)
+    print(f"Command: Get Logs", file=open(C.LOG_FILE, 'a+'))
+    print(f"Time: {get_time()}", file=open(C.LOG_FILE, 'a+'))
+    print(f"User: {username}", file=open(C.LOG_FILE, 'a+'))
+    if username == "garvit_joshi9":  # Sent from Developer
+        try:
+            with open(C.LOG_FILE, "rb") as file:
+                context.bot.send_document(
+                    chat_id=chat_id, document=file, filename=C.LOG_FILE)
+        except Exception as e:
+            print(f"Remarks: Error with File logs",
+                  file=open(C.LOG_FILE, 'a+'))
+            print(f"{e}", file=open(C.LOG_FILE, 'a+'))
+            update.message.reply_text("Error with logs file.")
+    else:
+        print("Remarks: Not a Developer", file=open(C.LOG_FILE, 'a+'))
+        update.message.reply_text(
+            "Sorry!! This command can only be executed by developer")
+    print("", file=open(C.LOG_FILE, 'a+'))
+
+
 def main():
     """Main function responsible for starting the bot and listening to commands.
     """
@@ -114,6 +161,8 @@ def main():
     dispatch.add_handler(CommandHandler("news", R.random_news))
     dispatch.add_handler(CommandHandler(
         "brod_news", R.brodcast_news, run_async=True))
+    dispatch.add_handler(CommandHandler(
+        "get_logs", send_logs, run_async=True))
 
     # Start the Bot
     updater.start_polling()

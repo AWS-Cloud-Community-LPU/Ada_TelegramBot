@@ -1,4 +1,4 @@
-LOG_FILE = "log.txt"   #logs message and important data
+LOG_FILE = "logs.txt"   #logs message and important data
 
 TITLE_STORE = "titles.txt"  #logs titles of news that are already sent
 
