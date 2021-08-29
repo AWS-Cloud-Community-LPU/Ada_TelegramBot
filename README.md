@@ -18,7 +18,7 @@ This will install all the project dependencies.
 
 **3. Configure Missing Files:**
 
-**File: api_key.py**
+**File: secrets.py**
 ```bash
 echo "API_KEY = 'YOUR_BOT_API_KEY'
 CHANNEL_ID = 'CHAT_ID_OF_GROUP'" > secrets.py

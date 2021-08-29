@@ -1,8 +1,8 @@
-LOG_FILE = "logs.txt"   #logs message and important data
+LOG_FILE = "logs.txt"  # logs message and important data
 
-TITLE_STORE = "titles.txt"  #logs titles of news that are already sent
+TITLE_STORE = "titles.txt"  # logs titles of news that are already sent
 
-EVENT_STORE = "events.txt"  #Store upcoming events
+EVENT_STORE = "events.txt"  # Store upcoming events
 
 BRODCAST_NEWS_FLAG = 0
 
