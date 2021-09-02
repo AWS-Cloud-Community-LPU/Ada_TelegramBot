@@ -1,6 +1,5 @@
 from string import Template
 import secrets as keys
-import logging
 from datetime import datetime
 from telegram.ext import (
     Updater,
@@ -13,36 +12,43 @@ from telegram import Update, ParseMode
 import constants as C
 import rss_feed as R
 
-print("Bot Started...")
-print(f"\n\nBot Started at {datetime.now()}\n", file=open(C.LOG_FILE, 'a+'))
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
-)
-
-
-def get_time():
+def get_time(update: Update = None):
     """Gets Current Time
+
     Returns:
-        HH:MM:SS AM/PM DD/MM/YYYY
+        HH:MM:SS {AM/PM} DD/MM/YYYY
     """
-    return datetime.now().strftime('%I:%M:%S %p %d/%m/%Y')
+    if update is None:
+        return datetime.now().strftime('%I:%M:%S %p %d/%m/%Y')
+    return update.message.date.astimezone().strftime('%I:%M:%S %p %d/%m/%Y')
 
 
 def get_username(update: Update, context: CallbackContext):
     """Gets Username of a person
+
     Returns:
         username
     """
     chat_id = update.message.chat_id  # Channel ID of the group
     user_id = update.message.from_user.id  # User ID of the person
     username = context.bot.getChatMember(chat_id, user_id).user.username
+    if username is None:
+        username = context.bot.getChatMember(chat_id, user_id).user.full_name
+        username = username + "(Name)"
     return username
+
+
+def print_logs(message):
+    """Writes logs in logs.txt
+    """
+    line = "-------------\n"
+    message = line + message + line
+    print(message, file=open(C.LOG_FILE, 'a+'))
 
 
 def welcome_user(update: Update, context: CallbackContext) -> None:
     """Welcome Command for New User
-
     Keyword arguments:
         update : This object represents an incoming update.
         context : This is a context object error handler.
@@ -52,8 +58,8 @@ def welcome_user(update: Update, context: CallbackContext) -> None:
         new_user = new_user.first_name
         welcome_message = "Welcome " + new_user
         context.bot.send_message(chat_id, welcome_message)
-        print(f"Welcome user at {datetime.now()} User: {new_user}", file=open(
-            C.LOG_FILE, 'a+'))
+        log_text = f"Welcome user at {get_time()} \nUser: {get_username(update, context)}\n"
+        print_logs(log_text)
 
 
 def start_command(update: Update, context: CallbackContext) -> None:
@@ -97,6 +103,9 @@ def events_command(update: Update, context: CallbackContext) -> int:
         context : This is a context object error handler.
     """
     try:
+        log_text = f"Command: {get_username(update, context)}\n"
+        log_text = log_text + f"User: {get_username(update, context)}\n"
+        print_logs(log_text)
         with open(C.EVENT_STORE, "r") as event_file:
             line_events = event_file.readlines()
             line_length = len(line_events)
@@ -122,24 +131,22 @@ def send_logs(update: Update, context: CallbackContext) -> None:
     """
     chat_id = update.message.chat_id
     username = get_username(update, context)
-    print(f"Command: Get Logs", file=open(C.LOG_FILE, 'a+'))
-    print(f"Time: {get_time()}", file=open(C.LOG_FILE, 'a+'))
-    print(f"User: {username}", file=open(C.LOG_FILE, 'a+'))
+    log_text = "Command: Get Logs\n"
+    log_text = log_text + f"Time: {get_time()}\n"
+    log_text = log_text + f"User: {username}\n"
     if username == "garvit_joshi9":  # Sent from Developer
         try:
             with open(C.LOG_FILE, "rb") as file:
                 context.bot.send_document(
                     chat_id=chat_id, document=file, filename=C.LOG_FILE)
         except Exception as e:
-            print(f"Remarks: Error with File logs",
-                  file=open(C.LOG_FILE, 'a+'))
-            print(f"{e}", file=open(C.LOG_FILE, 'a+'))
+            log_text = log_text + f"Remarks: Error with File logs\n"
+            log_text = log_text + f"{e}\n"
             update.message.reply_text("Error with logs file.")
     else:
-        print("Remarks: Not a Developer", file=open(C.LOG_FILE, 'a+'))
-        update.message.reply_text(
-            "Sorry!! This command can only be executed by developer")
-    print("", file=open(C.LOG_FILE, 'a+'))
+        log_text = log_text + "Remarks: Not a Developer\n"
+        update.message.reply_text(C.ERROR_OWNER)
+    print_logs(log_text)
 
 
 def main():
@@ -161,8 +168,7 @@ def main():
     dispatch.add_handler(CommandHandler("news", R.random_news))
     dispatch.add_handler(CommandHandler(
         "brod_news", R.brodcast_news, run_async=True))
-    dispatch.add_handler(CommandHandler(
-        "get_logs", send_logs, run_async=True))
+    dispatch.add_handler(CommandHandler("get_logs", send_logs, run_async=True))
 
     # Start the Bot
     updater.start_polling()
@@ -174,4 +180,7 @@ def main():
 
 
 if __name__ == "__main__":
+    print("Bot Started...")
+    log_text = f"Bot Started at {get_time()}\n"
+    print_logs(log_text)
     main()

@@ -8,6 +8,7 @@ import feedparser
 from telegram.ext import CallbackContext
 from telegram import ParseMode, Update
 import constants as C
+import main as M
 
 
 def check_status(update: Update, context: CallbackContext) -> int:
@@ -18,29 +19,27 @@ def check_status(update: Update, context: CallbackContext) -> int:
         update : This object represents an incoming update.
         context : This is a context object error handler.
     """
-    print(f"BRODCAST NEWS invoked at: {datetime.now()}", file=open(
-        C.LOG_FILE, 'a+'))
-    chat_id = update.message.chat_id  # Channel ID of the group
-    user_id = update.message.from_user.id  # User ID of the person
-    username = context.bot.getChatMember(chat_id, user_id).user.username
+    log_text = "Command: Brodcast News\n"
+    log_text = log_text + f"Time: {M.get_time()}\n"
+    username = M.get_username(update, context)
+    log_text = log_text + f"User: {username}\n"
     if username == "garvit_joshi9":  # Sent from Developer
-        print("Test Case #1: SUCCESS", file=open(C.LOG_FILE, 'a+'))
+        log_text = log_text + "Test Case #1: SUCCESS\n"
     else:
-        print(f"Test Case #1: FAILED\nUserName: {username}\n", file=open(
-            C.LOG_FILE, 'a+'))
-        update.message.reply_text(C.ERROR_OWNER,
-                                  parse_mode=ParseMode.MARKDOWN
-                                  )
+        log_text = log_text + "Test Case #1: FAILED\n"
+        update.message.reply_text(C.ERROR_OWNER, parse_mode=ParseMode.MARKDOWN)
+        M.print_logs(log_text)
         return -1
     if C.BRODCAST_NEWS_FLAG == 0:
-        print("Test Case #2: SUCCESS\n", file=open(C.LOG_FILE, 'a+'))
+        log_text = log_text + "Test Case #2: SUCCESS\n"
     else:
-        print("Test Case #2: FAILED\n", file=open(C.LOG_FILE, 'a+'))
-        update.message.reply_text(C.ERROR_BRODCAST_AGAIN,
-                                  parse_mode=ParseMode.MARKDOWN
-                                  )
+        log_text = log_text + "Test Case #2: FAILED\n"
+        update.message.reply_text(
+            C.ERROR_BRODCAST_AGAIN, parse_mode=ParseMode.MARKDOWN)
+        M.print_logs(log_text)
         return -1
     C.BRODCAST_NEWS_FLAG = 1
+    M.print_logs(log_text)
     return 0
 
 
@@ -120,19 +119,16 @@ def brodcast_news(update: Update, context: CallbackContext):
     """
     if check_status(update, context) == -1:
         return -1
-    update.message.reply_text("News will be periodically sent at 9:00am, 1:00pm, 5:30pm and 9:00pm",
-                              parse_mode=ParseMode.MARKDOWN
-                              )
+    update.message.reply_text(C.BRODCAST_NEWS, parse_mode=ParseMode.MARKDOWN)
     while True:
         entry = feed_parser()
         time_status = check_time()
         print(entry.title, file=open(C.TITLE_STORE, 'a+'))
         message = message_creator(entry, time_status)
-        context.bot.send_message(keys.CHANNEL_ID, message,
-                                 parse_mode=ParseMode.HTML
-                                 )
-        print(f"Brodcasted News send at: {datetime.now()}\n",
-              file=open(C.LOG_FILE, 'a+'))
+        context.bot.send_message(
+            keys.CHANNEL_ID, message, parse_mode=ParseMode.HTML)
+        log_text = f"Brodcasted News send at: {M.get_time()}\n"
+        M.print_logs(log_text)
         time.sleep(1)
 
 
@@ -148,5 +144,7 @@ def random_news(update: Update, context: CallbackContext) -> None:
     entry = news_feed.entries[news_index]
     message = message_creator(entry)
     update.message.reply_text(message, parse_mode=ParseMode.HTML)
-    print(f"Random News Message send at: {datetime.now()}\n", file=open(
-        C.LOG_FILE, 'a+'))
+    log_text = "Command: Random news\n"
+    log_text = log_text + f"Time: {M.get_time(update)}\n"
+    log_text = log_text + f"User: {M.get_username(update, context)}\n"
+    M.print_logs(log_text)

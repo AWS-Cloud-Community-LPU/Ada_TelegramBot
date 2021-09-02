@@ -8,6 +8,8 @@ BRODCAST_NEWS_FLAG = 0
 
 AWS_FEED_URL = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 
+BRODCAST_NEWS = "News will be periodically sent at 9:00am, 1:00pm, 5:30pm and 9:00pm"
+
 HELP_TEXT = """
 Hey There!
 My name is Ada. I was made in loving memory of Ada Lovelace, The First Computer Programmer.
