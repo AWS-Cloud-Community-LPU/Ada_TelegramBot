@@ -39,12 +39,13 @@ def get_username(update: Update, context: CallbackContext):
     return username
 
 
-def print_logs(message):
+def print_logs(log_message):
     """Writes logs in logs.txt
     """
     line = "-------------\n"
-    message = line + message + line
-    print(message, file=open(C.LOG_FILE, 'a+'))
+    log_message = line + log_message + line
+    with open(C.LOG_FILE, 'a+', encoding='utf8') as log_file:
+        print(log_message, file=log_file)
 
 
 def welcome_user(update: Update, context: CallbackContext) -> None:
