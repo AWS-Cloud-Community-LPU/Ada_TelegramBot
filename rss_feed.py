@@ -81,13 +81,13 @@ def check_time() -> str:
         if str(current_time) in ("09:00:00", "09:00:01", "09:00:02"):
             time.sleep(3)
             return "Morning"
-        elif str(current_time) in ("13:00:00", "13:00:01", "13:00:02"):
+        if str(current_time) in ("13:00:00", "13:00:01", "13:00:02"):
             time.sleep(3)
             return "Afternoon"
-        elif str(current_time) in ("17:30:00", "17:30:01", "17:30:02"):
+        if str(current_time) in ("17:30:00", "17:30:01", "17:30:02"):
             time.sleep(3)
             return "Evening"
-        elif str(current_time) in ("21:00:00", "21:00:01", "21:00:02"):
+        if str(current_time) in ("21:00:00", "21:00:01", "21:00:02"):
             time.sleep(3)
             return "Night"
 
@@ -96,9 +96,10 @@ def feed_parser():
     """Parses feed of AWS What's new and gives non duplicate news.
     """
     if not path.exists(C.TITLE_STORE):
-        open(C.TITLE_STORE, 'a').close()
+        with open(C.TITLE_STORE, 'a', encoding='utf-8'):
+            pass
     news_feed = feedparser.parse(C.AWS_FEED_URL)
-    with open(C.TITLE_STORE, "r") as title_file:
+    with open(C.TITLE_STORE, "r", encoding='utf-8') as title_file:
         line_titles = title_file.readlines()
         for entry in news_feed.entries:
             flag = 0
@@ -123,7 +124,8 @@ def brodcast_news(update: Update, context: CallbackContext):
     while True:
         entry = feed_parser()
         time_status = check_time()
-        print(entry.title, file=open(C.TITLE_STORE, 'a+'))
+        with open(C.TITLE_STORE, 'a+', encoding='utf-8') as title_file:
+            print(entry.title, file=title_file)
         message = message_creator(entry, time_status)
         context.bot.send_message(
             keys.CHANNEL_ID, message, parse_mode=ParseMode.HTML)

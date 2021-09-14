@@ -107,7 +107,7 @@ def events_command(update: Update, context: CallbackContext) -> int:
         log_text = f"Command: {get_username(update, context)}\n"
         log_text = log_text + f"User: {get_username(update, context)}\n"
         print_logs(log_text)
-        with open(C.EVENT_STORE, "r") as event_file:
+        with open(C.EVENT_STORE, "r", encoding="utf-8") as event_file:
             line_events = event_file.readlines()
             line_length = len(line_events)
             if line_length == 0:
@@ -141,7 +141,7 @@ def send_logs(update: Update, context: CallbackContext) -> None:
                 context.bot.send_document(
                     chat_id=chat_id, document=file, filename=C.LOG_FILE)
         except Exception as e:
-            log_text = log_text + f"Remarks: Error with File logs\n"
+            log_text = log_text + "Remarks: Error with File logs\n"
             log_text = log_text + f"{e}\n"
             update.message.reply_text("Error with logs file.")
     else:
@@ -181,7 +181,7 @@ def main():
 
 
 if __name__ == "__main__":
-    print("Bot Started...")
-    log_text = f"Bot Started at {get_time()}\n"
-    print_logs(log_text)
+    start_text = f"Bot Started at {get_time()}\n"
+    print(start_text)
+    print_logs(start_text)
     main()
