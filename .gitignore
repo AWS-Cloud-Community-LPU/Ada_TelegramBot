@@ -7,7 +7,9 @@ __pycache__/
 *.so
 
 #API Key File
-secrets.py
+secrets.ini
+credentials.json
+token.json
 
 #testing File and residual files
 test.py

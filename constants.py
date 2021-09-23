@@ -2,9 +2,11 @@ LOG_FILE = "logs.txt"  # logs message and important data
 
 TITLE_STORE = "titles.txt"  # logs titles of news that are already sent
 
-EVENT_STORE = "events.txt"  # Store upcoming events
-
 BRODCAST_NEWS_FLAG = 0
+
+CALENDAR_ID = 's5ehqsog0hudijb3rcbi520f30@group.calendar.google.com'
+
+CHANNEL_ID = '-1001264024051'
 
 AWS_FEED_URL = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 
@@ -43,4 +45,13 @@ Sorry, The command can only be executed by owners.
 
 ERROR_BRODCAST_AGAIN = """
 News are already being sent.
+"""
+
+EVENTS_TEMPLATE = """
+**Event No.:** $eno
+**Start Time:** $start
+**End Time:** $end
+**Summary:** $summary
+**Description:** $description
+**Meet Link:** $meet_link
 """

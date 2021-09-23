@@ -18,15 +18,14 @@ This will install all the project dependencies.
 
 **3. Configure Missing Files:**
 
-**File: secrets.py**
+**File: secrets.ini**
 ```bash
-echo "API_KEY = 'YOUR_BOT_API_KEY'
-CHANNEL_ID = 'CHAT_ID_OF_GROUP'" > secrets.py
+echo "[KEYS]\nAPI_KEY = 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" > secrets.ini
 ```
-A file ```secrets.py``` is missing as it contains a token to access the HTTP API of [Ada](t.me/AdaLovelance_bot) and Chat_id of [this](t.me/awscclpu) Group. The file is structured in this way: 
+A file ```secrets.ini``` is missing as it contains a token to access the HTTP API of [Ada](t.me/AdaLovelance_bot). The file is structured in this way: 
 ```python
-API_KEY = 'YOUR_BOT_API_KEY'
-CHANNEL_ID = 'CHAT_ID_OF_GROUP'
+[KEYS]
+API_KEY = 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
 ```
 
 **File: titles.txt**
@@ -34,12 +33,6 @@ CHANNEL_ID = 'CHAT_ID_OF_GROUP'
 touch titles.txt
 ```
 A file ```titles.txt``` contains all titles of brodcasted news so that duplicate news cannot be sended.
-
-**File: events.txt**
-```bash
-touch events.txt
-```
-A file ```events.txt``` contains all the Upcoming Events in a group of 3 Lines.
 
 **4. :tada: Run the bot:**
 ```bash

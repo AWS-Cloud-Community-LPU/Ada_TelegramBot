@@ -1,5 +1,5 @@
 from string import Template
-import secrets as keys
+import configparser
 from telegram.ext import (
     Updater,
     CommandHandler,
@@ -7,7 +7,7 @@ from telegram.ext import (
     MessageHandler,
     Filters
 )
-from telegram import Update, ParseMode
+from telegram import Update
 import constants as C
 import functions as F
 
@@ -60,34 +60,6 @@ def source_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(message)
 
 
-def events_command(update: Update, context: CallbackContext) -> int:
-    """Shows Upcoming events
-
-    Keyword arguments:
-        update : This object represents an incoming update.
-        context : This is a context object error handler.
-    """
-    try:
-        log_text = f"Command: {F.get_username(update, context)}\n"
-        log_text = log_text + f"User: {F.get_username(update, context)}\n"
-        F.print_logs(log_text)
-        with open(C.EVENT_STORE, "r", encoding="utf-8") as event_file:
-            line_events = event_file.readlines()
-            line_length = len(line_events)
-            if line_length == 0:
-                update.message.reply_text(
-                    C.NO_EVENTS, parse_mode=ParseMode.MARKDOWN)
-                return -1
-            for i in range(0, line_length, 2):
-                line_event = line_events[i] + line_events[i+1]
-                update.message.reply_text(
-                    line_event, parse_mode=ParseMode.HTML)
-            return 0
-    except FileNotFoundError:
-        update.message.reply_text(C.NO_EVENTS, parse_mode=ParseMode.MARKDOWN)
-        return -2
-
-
 def send_logs(update: Update, context: CallbackContext) -> None:
     """Sends Logs
     Keyword arguments:
@@ -117,8 +89,12 @@ def send_logs(update: Update, context: CallbackContext) -> None:
 def main():
     """Main function responsible for starting the bot and listening to commands.
     """
+    config = configparser.ConfigParser()
+    config.read('secrets.ini')
+
     # Create the Updater and pass it our bot's token.
-    updater = Updater(keys.API_KEY, use_context=True, workers=30)
+    updater = Updater(token=config['KEYS']
+                      ['API_KEY'], use_context=True, workers=30)
 
     # Get the dispatcher to register handlers
     dispatch = updater.dispatcher
@@ -129,7 +105,7 @@ def main():
     dispatch.add_handler(CommandHandler("start", start_command))
     dispatch.add_handler(CommandHandler("help", help_command))
     dispatch.add_handler(CommandHandler("source", source_command))
-    dispatch.add_handler(CommandHandler("events", events_command))
+    dispatch.add_handler(CommandHandler("events", F.events_command))
     dispatch.add_handler(CommandHandler("news", F.random_news))
     dispatch.add_handler(CommandHandler(
         "brod_news", F.brodcast_news, run_async=True))
