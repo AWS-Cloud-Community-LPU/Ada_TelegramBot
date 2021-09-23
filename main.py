@@ -154,7 +154,7 @@ def main():
     """Main function responsible for starting the bot and listening to commands.
     """
     # Create the Updater and pass it our bot's token.
-    updater = Updater(keys.API_KEY, use_context=True, workers=5)
+    updater = Updater(keys.API_KEY, use_context=True, workers=30)
 
     # Get the dispatcher to register handlers
     dispatch = updater.dispatcher

@@ -142,7 +142,7 @@ def random_news(update: Update, context: CallbackContext) -> None:
         context : This is a context object error handler.
     """
     news_feed = feedparser.parse(C.AWS_FEED_URL)
-    news_index = random.randint(0, len(news_feed.entries))
+    news_index = random.randint(0, len(news_feed.entries)-1)
     entry = news_feed.entries[news_index]
     message = message_creator(entry)
     update.message.reply_text(message, parse_mode=ParseMode.HTML)
