@@ -1,6 +1,5 @@
 from string import Template
 import secrets as keys
-from datetime import datetime
 from telegram.ext import (
     Updater,
     CommandHandler,
@@ -10,42 +9,7 @@ from telegram.ext import (
 )
 from telegram import Update, ParseMode
 import constants as C
-import rss_feed as R
-
-
-def get_time(update: Update = None):
-    """Gets Current Time
-
-    Returns:
-        HH:MM:SS {AM/PM} DD/MM/YYYY
-    """
-    if update is None:
-        return datetime.now().strftime('%I:%M:%S %p %d/%m/%Y')
-    return update.message.date.astimezone().strftime('%I:%M:%S %p %d/%m/%Y')
-
-
-def get_username(update: Update, context: CallbackContext):
-    """Gets Username of a person
-
-    Returns:
-        username
-    """
-    chat_id = update.message.chat_id  # Channel ID of the group
-    user_id = update.message.from_user.id  # User ID of the person
-    username = context.bot.getChatMember(chat_id, user_id).user.username
-    if username is None:
-        username = context.bot.getChatMember(chat_id, user_id).user.full_name
-        username = username + "(Name)"
-    return username
-
-
-def print_logs(log_message):
-    """Writes logs in logs.txt
-    """
-    line = "-------------\n"
-    log_message = line + log_message + line
-    with open(C.LOG_FILE, 'a+', encoding='utf8') as log_file:
-        print(log_message, file=log_file)
+import functions as F
 
 
 def welcome_user(update: Update, context: CallbackContext) -> None:
@@ -59,8 +23,8 @@ def welcome_user(update: Update, context: CallbackContext) -> None:
         new_user = new_user.first_name
         welcome_message = "Welcome " + new_user
         context.bot.send_message(chat_id, welcome_message)
-        log_text = f"Welcome user at {get_time()} \nUser: {get_username(update, context)}\n"
-        print_logs(log_text)
+        log_text = f"Welcome user at {F.get_time()} \nUser: {F.get_username(update, context)}\n"
+        F.print_logs(log_text)
 
 
 def start_command(update: Update, context: CallbackContext) -> None:
@@ -104,9 +68,9 @@ def events_command(update: Update, context: CallbackContext) -> int:
         context : This is a context object error handler.
     """
     try:
-        log_text = f"Command: {get_username(update, context)}\n"
-        log_text = log_text + f"User: {get_username(update, context)}\n"
-        print_logs(log_text)
+        log_text = f"Command: {F.get_username(update, context)}\n"
+        log_text = log_text + f"User: {F.get_username(update, context)}\n"
+        F.print_logs(log_text)
         with open(C.EVENT_STORE, "r", encoding="utf-8") as event_file:
             line_events = event_file.readlines()
             line_length = len(line_events)
@@ -131,9 +95,9 @@ def send_logs(update: Update, context: CallbackContext) -> None:
         context : This is a context object error handler.
     """
     chat_id = update.message.chat_id
-    username = get_username(update, context)
+    username = F.get_username(update, context)
     log_text = "Command: Get Logs\n"
-    log_text = log_text + f"Time: {get_time()}\n"
+    log_text = log_text + f"Time: {F.get_time()}\n"
     log_text = log_text + f"User: {username}\n"
     if username == "garvit_joshi9":  # Sent from Developer
         try:
@@ -147,7 +111,7 @@ def send_logs(update: Update, context: CallbackContext) -> None:
     else:
         log_text = log_text + "Remarks: Not a Developer\n"
         update.message.reply_text(C.ERROR_OWNER)
-    print_logs(log_text)
+    F.print_logs(log_text)
 
 
 def main():
@@ -166,9 +130,9 @@ def main():
     dispatch.add_handler(CommandHandler("help", help_command))
     dispatch.add_handler(CommandHandler("source", source_command))
     dispatch.add_handler(CommandHandler("events", events_command))
-    dispatch.add_handler(CommandHandler("news", R.random_news))
+    dispatch.add_handler(CommandHandler("news", F.random_news))
     dispatch.add_handler(CommandHandler(
-        "brod_news", R.brodcast_news, run_async=True))
+        "brod_news", F.brodcast_news, run_async=True))
     dispatch.add_handler(CommandHandler("get_logs", send_logs, run_async=True))
 
     # Start the Bot
@@ -181,7 +145,7 @@ def main():
 
 
 if __name__ == "__main__":
-    start_text = f"Bot Started at {get_time()}\n"
+    start_text = f"Bot Started at {F.get_time()}\n"
     print(start_text)
-    print_logs(start_text)
+    F.print_logs(start_text)
     main()

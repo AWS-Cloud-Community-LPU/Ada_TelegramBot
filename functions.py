@@ -8,7 +8,41 @@ import feedparser
 from telegram.ext import CallbackContext
 from telegram import ParseMode, Update
 import constants as C
-import main as M
+
+
+def get_time(update: Update = None):
+    """Gets Current Time
+
+    Returns:
+        HH:MM:SS {AM/PM} DD/MM/YYYY
+    """
+    if update is None:
+        return datetime.now().strftime('%I:%M:%S %p %d/%m/%Y')
+    return update.message.date.astimezone().strftime('%I:%M:%S %p %d/%m/%Y')
+
+
+def get_username(update: Update, context: CallbackContext):
+    """Gets Username of a person
+
+    Returns:
+        username
+    """
+    chat_id = update.message.chat_id  # Channel ID of the group
+    user_id = update.message.from_user.id  # User ID of the person
+    username = context.bot.getChatMember(chat_id, user_id).user.username
+    if username is None:
+        username = context.bot.getChatMember(chat_id, user_id).user.full_name
+        username = username + "(Name)"
+    return username
+
+
+def print_logs(log_message):
+    """Writes logs in logs.txt
+    """
+    line = "-------------\n"
+    log_message = line + log_message + line
+    with open(C.LOG_FILE, 'a+', encoding='utf8') as log_file:
+        print(log_message, file=log_file)
 
 
 def check_status(update: Update, context: CallbackContext) -> int:
@@ -20,15 +54,15 @@ def check_status(update: Update, context: CallbackContext) -> int:
         context : This is a context object error handler.
     """
     log_text = "Command: Brodcast News\n"
-    log_text = log_text + f"Time: {M.get_time()}\n"
-    username = M.get_username(update, context)
+    log_text = log_text + f"Time: {get_time()}\n"
+    username = get_username(update, context)
     log_text = log_text + f"User: {username}\n"
     if username == "garvit_joshi9":  # Sent from Developer
         log_text = log_text + "Test Case #1: SUCCESS\n"
     else:
         log_text = log_text + "Test Case #1: FAILED\n"
         update.message.reply_text(C.ERROR_OWNER, parse_mode=ParseMode.MARKDOWN)
-        M.print_logs(log_text)
+        print_logs(log_text)
         return -1
     if C.BRODCAST_NEWS_FLAG == 0:
         log_text = log_text + "Test Case #2: SUCCESS\n"
@@ -36,10 +70,10 @@ def check_status(update: Update, context: CallbackContext) -> int:
         log_text = log_text + "Test Case #2: FAILED\n"
         update.message.reply_text(
             C.ERROR_BRODCAST_AGAIN, parse_mode=ParseMode.MARKDOWN)
-        M.print_logs(log_text)
+        print_logs(log_text)
         return -1
     C.BRODCAST_NEWS_FLAG = 1
-    M.print_logs(log_text)
+    print_logs(log_text)
     return 0
 
 
@@ -129,8 +163,8 @@ def brodcast_news(update: Update, context: CallbackContext):
         message = message_creator(entry, time_status)
         context.bot.send_message(
             keys.CHANNEL_ID, message, parse_mode=ParseMode.HTML)
-        log_text = f"Brodcasted News send at: {M.get_time()}\n"
-        M.print_logs(log_text)
+        log_text = f"Brodcasted News send at: {get_time()}\n"
+        print_logs(log_text)
         time.sleep(1)
 
 
@@ -147,6 +181,6 @@ def random_news(update: Update, context: CallbackContext) -> None:
     message = message_creator(entry)
     update.message.reply_text(message, parse_mode=ParseMode.HTML)
     log_text = "Command: Random news\n"
-    log_text = log_text + f"Time: {M.get_time(update)}\n"
-    log_text = log_text + f"User: {M.get_username(update, context)}\n"
-    M.print_logs(log_text)
+    log_text = log_text + f"Time: {get_time(update)}\n"
+    log_text = log_text + f"User: {get_username(update, context)}\n"
+    print_logs(log_text)
