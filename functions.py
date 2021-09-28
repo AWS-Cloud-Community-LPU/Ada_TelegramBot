@@ -178,7 +178,8 @@ def message_creator(entry, greetings="None") -> str:
     cleanr = re.compile(
         '<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
     summary = re.sub(cleanr, '', entry.summary)
-    summary = "\n\n<b>Summary:</b> " + summary
+    if summary != "":
+        summary = "\n\n<b>Summary:</b> " + summary
     link = "\n\n<b>Link: </b>" + "<a href=\"" + entry.link + "\">Click here</a>"
     message = title + summary + link
     if greetings in ("Morning", "Afternoon", "Evening"):
