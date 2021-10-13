@@ -1,3 +1,16 @@
+"""
+MIT License
+Copyright (c) 2021 AWS Cloud Community LPU
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+
 from string import Template
 import configparser
 from telegram.ext import (
@@ -76,9 +89,9 @@ def send_logs(update: Update, context: CallbackContext) -> None:
             with open(C.LOG_FILE, "rb") as file:
                 context.bot.send_document(
                     chat_id=chat_id, document=file, filename=C.LOG_FILE)
-        except Exception as e:
+        except Exception as err:
             log_text = log_text + "Remarks: Error with File logs\n"
-            log_text = log_text + f"{e}\n"
+            log_text = log_text + f"{err}\n"
             update.message.reply_text("Error with logs file.")
     else:
         log_text = log_text + "Remarks: Not a Developer\n"
