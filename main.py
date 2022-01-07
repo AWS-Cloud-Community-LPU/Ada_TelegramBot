@@ -27,6 +27,7 @@ import functions as F
 
 def welcome_user(update: Update, context: CallbackContext) -> None:
     """Welcome Command for New User
+
     Keyword arguments:
         update : This object represents an incoming update.
         context : This is a context object error handler.
@@ -75,6 +76,7 @@ def source_command(update: Update, context: CallbackContext) -> None:
 
 def send_logs(update: Update, context: CallbackContext) -> None:
     """Sends Logs
+
     Keyword arguments:
         update : This object represents an incoming update.
         context : This is a context object error handler.
@@ -135,6 +137,5 @@ def main():
 
 if __name__ == "__main__":
     start_text = f"Bot Started at {F.get_time()}\n"
-    print(start_text)
-    F.print_logs(start_text)
+    F.print_logs(start_text, True)
     main()

@@ -139,11 +139,17 @@ def events_command(update: Update, context: CallbackContext):
         update.message.reply_text(e_message, parse_mode=ParseMode.MARKDOWN)
 
 
-def print_logs(log_message):
+def print_logs(log_message, console=False):
     """Writes logs in logs.txt
+
+    Keyword arguments:
+        message : Message to be logged
+        console : specifies if to print log in console
     """
     line = "-------------\n"
     log_message = line + log_message + line
+    if console is True:
+        print(log_message)
     with open(C.LOG_FILE, 'a+', encoding='utf8') as log_file:
         print(log_message, file=log_file)
 
