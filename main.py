@@ -1,6 +1,6 @@
 """
 MIT License
-Copyright (c) 2021 AWS Cloud Community LPU
+Copyright (c) 2022 AWS Cloud Community LPU
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -18,7 +18,7 @@ from telegram.ext import (
     CommandHandler,
     CallbackContext,
     MessageHandler,
-    Filters
+    Filters,
 )
 from telegram import Update
 import constants as C
@@ -49,7 +49,7 @@ def start_command(update: Update, context: CallbackContext) -> None:
         context : This is a context object error handler.
     """
     user = update.message.from_user
-    update.message.reply_text(f'Hy there !! {user.first_name}')
+    update.message.reply_text(f"Hy there !! {user.first_name}")
 
 
 def help_command(update: Update, context: CallbackContext) -> None:
@@ -90,7 +90,8 @@ def send_logs(update: Update, context: CallbackContext) -> None:
         try:
             with open(C.LOG_FILE, "rb") as file:
                 context.bot.send_document(
-                    chat_id=chat_id, document=file, filename=C.LOG_FILE)
+                    chat_id=chat_id, document=file, filename=C.LOG_FILE
+                )
         except Exception as err:
             log_text = log_text + "Remarks: Error with File logs\n"
             log_text = log_text + f"{err}\n"
@@ -102,28 +103,26 @@ def send_logs(update: Update, context: CallbackContext) -> None:
 
 
 def main():
-    """Main function responsible for starting the bot and listening to commands.
-    """
+    """Main function responsible for starting the bot and listening to commands."""
     config = configparser.ConfigParser()
-    config.read('secrets.ini')
+    config.read("secrets.ini")
 
     # Create the Updater and pass it our bot's token.
-    updater = Updater(token=config['KEYS']
-                      ['API_KEY'], use_context=True, workers=30)
+    updater = Updater(token=config["KEYS"]["API_KEY"], use_context=True, workers=30)
 
     # Get the dispatcher to register handlers
     dispatch = updater.dispatcher
 
     # on different commands - answer in Telegram
-    dispatch.add_handler(MessageHandler(
-        Filters.status_update.new_chat_members, welcome_user))
+    dispatch.add_handler(
+        MessageHandler(Filters.status_update.new_chat_members, welcome_user)
+    )
     dispatch.add_handler(CommandHandler("start", start_command))
     dispatch.add_handler(CommandHandler("help", help_command))
     dispatch.add_handler(CommandHandler("source", source_command))
     dispatch.add_handler(CommandHandler("events", F.events_command))
     dispatch.add_handler(CommandHandler("news", F.random_news))
-    dispatch.add_handler(CommandHandler(
-        "brod_news", F.brodcast_news, run_async=True))
+    dispatch.add_handler(CommandHandler("brod_news", F.brodcast_news, run_async=True))
     dispatch.add_handler(CommandHandler("get_logs", send_logs, run_async=True))
 
     # Start the Bot

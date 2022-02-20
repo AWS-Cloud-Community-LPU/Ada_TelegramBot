@@ -1,6 +1,6 @@
 """
 MIT License
-Copyright (c) 2021 AWS Cloud Community LPU
+Copyright (c) 2022 AWS Cloud Community LPU
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -11,15 +11,15 @@ SOFTWARE.
 """
 
 
-LOG_FILE = "logs.txt"  # logs message and important data
+LOG_FILE = "Main.log"  # logs message and important data
 
 TITLE_STORE = "titles.txt"  # logs titles of news that are already sent
 
 BRODCAST_NEWS_FLAG = 0
 
-CALENDAR_ID = 's5ehqsog0hudijb3rcbi520f30@group.calendar.google.com'
+CALENDAR_ID = "s5ehqsog0hudijb3rcbi520f30@group.calendar.google.com"
 
-CHANNEL_ID = '-1001264024051'
+CHANNEL_ID = "-1001264024051"
 
 AWS_FEED_URL = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 
