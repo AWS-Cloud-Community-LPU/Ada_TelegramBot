@@ -2,4 +2,4 @@ feedparser==6.0.8
 python-telegram-bot==13.11
 google-api-python-client==2.40.0
 google-auth-httplib2==0.1.0
-google-auth-oauthlib==0.5.0
+google-auth-oauthlib==0.5.1
