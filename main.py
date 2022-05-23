@@ -63,7 +63,7 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 
 def source_command(update: Update, context: CallbackContext) -> None:
-    """Prints GitHub Source Code
+    """Prints GitHub Source Code URL
 
     Keyword arguments:
         update : This object represents an incoming update.
