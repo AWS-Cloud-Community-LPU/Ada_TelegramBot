@@ -1,4 +1,4 @@
-feedparser==6.0.9
+feedparser==6.0.10
 python-telegram-bot==13.11
 google-api-python-client==2.48.0
 google-auth-httplib2==0.1.0
