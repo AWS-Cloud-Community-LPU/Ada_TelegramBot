@@ -10,12 +10,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from threading import Semaphore
+
 
 LOG_FILE = "Main.log"  # logs message and important data
 
 TITLE_STORE = "titles.txt"  # logs titles of news that are already sent
 
-BRODCAST_NEWS_FLAG = 0
+DEVELOPERS = ["garvit_joshi9"]  # Usernames of developers
+
+BRODCAST_NEWS_FLAG = Semaphore()  # Only one instance of Brodcast news should be running
 
 CALENDAR_ID = "s5ehqsog0hudijb3rcbi520f30@group.calendar.google.com"
 
@@ -23,7 +27,7 @@ CHANNEL_ID = "-1001264024051"
 
 AWS_FEED_URL = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 
-BRODCAST_NEWS = "News will be periodically sent at 9:00am, 1:00pm, 5:30pm and 9:00pm"
+BRODCAST_NEWS = "News will be periodically sent at 9:00am, 1:00pm, 5:30pm and 9:00pm\n"
 
 HELP_TEXT = """
 Hey There!
@@ -56,9 +60,7 @@ ERROR_OWNER = """
 Sorry, The command can only be executed by owners.
 """
 
-ERROR_BRODCAST_AGAIN = """
-News are already being sent.
-"""
+ERROR_BRODCAST_AGAIN = """News are already being sent.\n"""
 
 EVENTS_TEMPLATE = """
 **Event No.:** $eno

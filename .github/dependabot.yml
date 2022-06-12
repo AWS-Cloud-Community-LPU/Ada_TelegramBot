@@ -9,14 +9,3 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    allow:
-      - dependency-name: "feedparser"
-        dependency-type: "direct"
-      - dependency-name: "python-telegram-bot"
-        dependency-type: "direct"
-      - dependency-name: "google-api-python-client"
-        dependency-type: "direct"
-      - dependency-name: "google-auth-httplib2"
-        dependency-type: "direct"
-      - dependency-name: "google-auth-oauthlib"
-        dependency-type: "direct"

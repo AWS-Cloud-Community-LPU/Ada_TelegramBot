@@ -166,9 +166,9 @@ def print_logs(log_message, console=False):
         print(log_message, file=log_file)
 
 
-def check_status(update: Update, context: CallbackContext) -> int:
-    """Checks status if brodcast news was sent from a specific username,
-    and if brod_news command is only invoked once.
+def check_status(update: Update, context: CallbackContext) -> bool:
+    """Checks status if brodcast news was sent from developer(s), AND 
+    if command is only invoked once.
 
     Keyword arguments:
         update : This object represents an incoming update.
@@ -178,23 +178,18 @@ def check_status(update: Update, context: CallbackContext) -> int:
     log_text = log_text + f"Time: {get_time(update)}\n"
     username = get_username(update, context)
     log_text = log_text + f"User: {username}\n"
-    if username == "garvit_joshi9":  # Sent from Developer
-        log_text = log_text + "Test Case #1: SUCCESS\n"
-    else:
-        log_text = log_text + "Test Case #1: FAILED\n"
+    if username not in C.DEVELOPERS:  # Sent from Developer
+        log_text = log_text + "DEVELOPER CHECK FAILED\n"
         update.message.reply_text(C.ERROR_OWNER, parse_mode=ParseMode.MARKDOWN)
         print_logs(log_text)
-        return -1
-    if C.BRODCAST_NEWS_FLAG == 0:
-        log_text = log_text + "Test Case #2: SUCCESS\n"
-    else:
-        log_text = log_text + "Test Case #2: FAILED\n"
+        return False
+    if not C.BRODCAST_NEWS_FLAG.acquire(blocking=False):
+        log_text = log_text + C.ERROR_BRODCAST_AGAIN
         update.message.reply_text(C.ERROR_BRODCAST_AGAIN, parse_mode=ParseMode.MARKDOWN)
         print_logs(log_text)
-        return -1
-    C.BRODCAST_NEWS_FLAG = 1
+        return False
     print_logs(log_text)
-    return 0
+    return True
 
 
 def message_creator(entry, greetings="None") -> str:
@@ -271,7 +266,7 @@ def brodcast_news(update: Update, context: CallbackContext):
         update : This object represents an incoming update.
         context : This is a context object error handler.
     """
-    if check_status(update, context) == -1:
+    if not check_status(update, context):
         return -1
     update.message.reply_text(C.BRODCAST_NEWS, parse_mode=ParseMode.MARKDOWN)
     while True:
