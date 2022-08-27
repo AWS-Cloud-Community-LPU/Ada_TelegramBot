@@ -107,8 +107,12 @@ def main():
     config = configparser.ConfigParser()
     config.read("secrets.ini")
 
-    # Create the Updater and pass it our bot's token.
-    updater = Updater(token=config["KEYS"]["API_KEY"], use_context=True, workers=30)
+    try:
+        # Create the Updater and pass it our bot's token.
+        updater = Updater(token=config["KEYS"]["API_KEY"], use_context=True, workers=30)
+    except KeyError:
+        F.print_logs("Config File not found.\nExiting.\n", True)
+        return
 
     # Get the dispatcher to register handlers
     dispatch = updater.dispatcher

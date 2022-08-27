@@ -2,4 +2,5 @@
 disable=
     W0613, # Unused argument 'context' (unused-argument)
     E1101, # Instance of 'Resource' has no 'events' member (no-member)
-    W0703  # Catching too general exception Exception (broad-except)
+    W0703,  # Catching too general exception Exception (broad-except)
+    R1732   #Consider using 'with' for resource-allocating operations (consider-using-with)
