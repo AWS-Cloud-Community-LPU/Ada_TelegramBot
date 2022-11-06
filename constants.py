@@ -17,7 +17,7 @@ LOG_FILE = "Main.log"  # logs message and important data
 
 TITLE_STORE = "titles.txt"  # logs titles of news that are already sent
 
-DEVELOPERS = ["garvit_joshi9"]  # Usernames of developers
+DEVELOPERS = ["hey_garvit"]  # Usernames of developers
 
 BRODCAST_NEWS_FLAG = Semaphore()  # Only one instance of Brodcast news should be running
 
