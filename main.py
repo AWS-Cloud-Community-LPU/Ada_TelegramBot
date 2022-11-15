@@ -105,13 +105,23 @@ def send_logs(update: Update, context: CallbackContext) -> None:
 def main():
     """Main function responsible for starting the bot and listening to commands."""
     config = configparser.ConfigParser()
-    config.read("secrets.ini")
+    config.read("config.ini")
 
     try:
         # Create the Updater and pass it our bot's token.
-        updater = Updater(token=config["KEYS"]["API_KEY"], use_context=True, workers=30)
-    except KeyError:
-        F.print_logs("Config File not found.\nExiting.\n", True)
+        secrets_config = config["SECRETS"]
+        C.CHANNEL_ID = secrets_config["CALENDAR_ID"]
+        C.CALENDAR_ID = secrets_config["CALENDAR_ID"]
+        project_config = config["PROJECT"]
+        C.DEVELOPERS = project_config["DEVELOPERS"].split(",")
+        C.TITLE_FILE = project_config["TITLE_FILE"]
+        updater = Updater(token=secrets_config["API_KEY"], use_context=True, workers=30)
+    except KeyError as k:
+        F.print_logs(
+            "Issue in 'config.ini'. \n\
+                Please visit: https://github.com/AWS-Cloud-Community-LPU/Ada_TelegramBot#readme .\nExiting.\n",
+            True,
+        )
         return
 
     # Get the dispatcher to register handlers

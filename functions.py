@@ -167,7 +167,7 @@ def print_logs(log_message, console=False):
 
 
 def check_status(update: Update, context: CallbackContext) -> bool:
-    """Checks status if brodcast news was sent from developer(s), AND 
+    """Checks status if brodcast news was sent from developer(s), AND
     if command is only invoked once.
 
     Keyword arguments:
@@ -243,11 +243,11 @@ def check_time() -> str:
 
 def feed_parser():
     """Parses feed of AWS What's new and gives non duplicate news."""
-    if not path.exists(C.TITLE_STORE):
-        with open(C.TITLE_STORE, "a", encoding="utf-8"):
+    if not path.exists(C.TITLE_FILE):
+        with open(C.TITLE_FILE, "a", encoding="utf-8"):
             pass
     news_feed = feedparser.parse(C.AWS_FEED_URL)
-    with open(C.TITLE_STORE, "r", encoding="utf-8") as title_file:
+    with open(C.TITLE_FILE, "r", encoding="utf-8") as title_file:
         line_titles = title_file.readlines()
         for entry in news_feed.entries:
             flag = 0
@@ -272,7 +272,7 @@ def brodcast_news(update: Update, context: CallbackContext):
     while True:
         entry = feed_parser()
         time_status = check_time()
-        with open(C.TITLE_STORE, "a+", encoding="utf-8") as title_file:
+        with open(C.TITLE_FILE, "a+", encoding="utf-8") as title_file:
             print(entry.title, file=title_file)
         message = message_creator(entry, time_status)
         context.bot.send_message(C.CHANNEL_ID, message, parse_mode=ParseMode.HTML)

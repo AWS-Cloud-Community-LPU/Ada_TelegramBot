@@ -18,21 +18,30 @@ This will install all the project dependencies.
 
 **3. Configure Missing Files:**
 
-**File: secrets.ini**
+**File: config.ini**
 ```bash
-echo "[KEYS]\nAPI_KEY = 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" > secrets.ini
+echo "[KEYS]\nAPI_KEY = 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11\nCALENDAR_ID = GOOGLE_CALENDER_ID_HERE\nCHANNEL_ID = TELEGRAM_CHANNEL_ID_HERE\n\n
+[PROJECT]
+TITLE_FILE = titles.txt
+DEVELOPERS = USERNAME_OF_DEV(s)_COMMA_SEPERATED" > config.ini
 ```
-A file ```secrets.ini``` is missing as it contains a token to access the HTTP API of [Ada](t.me/AdaLovelance_bot). The file is structured in this way: 
-```python
+A file ```config.ini``` is missing as it contains a token to access the HTTP API of [Ada](t.me/AdaLovelance_bot) and other secrets of this project. The file is structured in this way: 
+```
 [KEYS]
 API_KEY = 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
+CALENDAR_ID = GOOGLE_CALENDER_ID_HERE
+CHANNEL_ID = TELEGRAM_CHANNEL_ID_HERE
+
+[PROJECT]
+TITLE_FILE = titles.txt
+DEVELOPERS = USERNAME_OF_DEV(s)_COMMA_SEPERATED
 ```
 
 **File: titles.txt**
 ```bash
 touch titles.txt
 ```
-A file ```titles.txt``` contains all titles of brodcasted news so that duplicate news cannot be sended.
+A file ```titles.txt``` contains all titles of brodcasted news so that duplicate news cannot be sended. You need to configure this on 'config.ini'.
 
 **4. :tada: Run the bot:**
 ```bash
