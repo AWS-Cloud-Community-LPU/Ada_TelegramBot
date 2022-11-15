@@ -15,15 +15,15 @@ from threading import Semaphore
 
 LOG_FILE = "Main.log"  # logs message and important data
 
-TITLE_STORE = "titles.txt"  # logs titles of news that are already sent
+TITLE_FILE = "titles.txt"  # logs titles of news that are already sent(DEFAULT)
 
-DEVELOPERS = ["hey_garvit"]  # Usernames of developers
+DEVELOPERS = []  # Usernames of developers(Will be loded from config)
 
 BRODCAST_NEWS_FLAG = Semaphore()  # Only one instance of Brodcast news should be running
 
-CALENDAR_ID = "s5ehqsog0hudijb3rcbi520f30@group.calendar.google.com"
+CALENDAR_ID = "GOOGLE CALENDER ID"  # Will be loded from config
 
-CHANNEL_ID = "-1001264024051"
+CHANNEL_ID = "TELEGRAM CHANNEL ID"  # Will be loded from config
 
 AWS_FEED_URL = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 
