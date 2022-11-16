@@ -110,7 +110,7 @@ def main():
     try:
         # Create the Updater and pass it our bot's token.
         secrets_config = config["SECRETS"]
-        C.CHANNEL_ID = secrets_config["CALENDAR_ID"]
+        C.CHANNEL_ID = secrets_config["CHANNEL_ID"]
         C.CALENDAR_ID = secrets_config["CALENDAR_ID"]
         project_config = config["PROJECT"]
         C.DEVELOPERS = project_config["DEVELOPERS"].split(",")
